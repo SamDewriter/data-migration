@@ -10,11 +10,11 @@ ShopEase Retail is a mid-sized retail chain specializing in consumer goods, elec
 
 ShopEase Retail currently relies on an aging on-premise database infrastructure to store and manage critical business data, including sales, inventory, and customer information. Maintaining this infrastructure requires significant costs and resources, including hardware upgrades, manual backups, and ongoing server maintenance. In addition to these operational challenges, the system experiences occasional outages, particularly during high traffic periods, which disrupt the online shopping experience for customers. These outages result in lost sales and diminished customer satisfaction.
 
-Proposed Solution
+<h3>Proposed Solution</h3>
 
 To remain competitive and enhance business operations, ShopEase must migrate to a more scalable, cost-effective, and reliable cloud-based data infrastructure. This migration will not only reduce the burden of maintaining on-premise resources but also improve data accessibility, enabling advanced analytics to drive business insights and improve the customer experience.
 
-Rationale for the Project
+<h3>Rationale for the Project</h3>
 - Cost Reduction
 - Improved Reliability and Uptime
 - Scalability
