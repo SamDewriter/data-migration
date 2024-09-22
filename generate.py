@@ -52,21 +52,21 @@ product_categories = {
 
 companies = {
     'Electronics': ['Apple', 'Samsung', 'Dell', 'HP', 'Sony', 'Microsoft', 'Lenovo', 'Asus', 'Acer', 'Toshiba'],
-    'Clothing': ['Nike', 'Adidas', 'Levi\'s', 'H&M', 'Zara', 'Gap', 'Uniqlo', 'Forever 21', 'American Eagle', 'Old Navy'],
+    'Clothing': ['Nike', 'Adidas', 'Levis', 'H&M', 'Zara', 'Gap', 'Uniqlo', 'Forever 21', 'American Eagle', 'Old Navy'],
     'Books': ['Penguin Random House', 'HarperCollins', 'Simon & Schuster', 
               'Hachette Livre', 'Macmillan Publishers', 'Scholastic', 'Pearson', 'Oxford University Press', 'Wiley', 'Bloomsbury'],
     'Home': ['IKEA', 'Wayfair', 'Ashley Furniture', 'Rooms', 'Crate & Barrel', 'Pier 1', 'West Elm', 'Pottery Barn', 'Ethan Allen', 'Havertys'],
-    'Garden': ['Home Depot', 'Lowe\'s', 'Walmart', 'Target', 'Ace Hardware', 'Menards', 'True Value', 'Orchard Supply Hardware', 'Do it Best', 'Sears'],
-    'Beauty': ['L\'Oréal', 'Estée Lauder', 'Procter & Gamble', 'Unilever', 'Shiseido', 'Coty', 'Johnson & Johnson', 'Revlon', 'Kao', 'Beiersdorf'],
+    'Garden': ['Home Depot', 'Lowes', 'Walmart', 'Target', 'Ace Hardware', 'Menards', 'True Value', 'Orchard Supply Hardware', 'Do it Best', 'Sears'],
+    'Beauty': ['LOréal', 'Estée Lauder', 'Procter & Gamble', 'Unilever', 'Shiseido', 'Coty', 'Johnson & Johnson', 'Revlon', 'Kao', 'Beiersdorf'],
     'Health': ['Johnson & Johnson', 'Pfizer', 'Roche', 'Novartis', 'Merck', 'GlaxoSmithKline', 'Sanofi', 'AbbVie', 'Amgen', 'Bayer'],
     'Toys': ['Mattel', 'Hasbro', 'LEGO', 'Bandai Namco', 'Spin Master', 'MGA Entertainment', 'Jazwares', 'Funko', 'Playmates Toys', 'WowWee'],
     'Sports': ['Nike', 'Adidas', 'Under Armour', 'Puma', 'Reebok', 'New Balance', 'Asics', 'Fila', 'Skechers', 'Converse'],
-    'Outdoors': ['REI', 'Cabela\'s', 'Bass Pro Shops', 'Dick\'s Sporting Goods', 'Academy Sports + Outdoors', 'Gander Outdoors', 'Field & Stream', 'Big 5 Sporting Goods', 'Sportsman\'s Warehouse', 'Orvis'],
+    'Outdoors': ['REI', 'Cabelas', 'Bass Pro Shops', 'Dicks Sporting Goods', 'Academy Sports + Outdoors', 'Gander Outdoors', 'Field & Stream', 'Big 5 Sporting Goods', 'Sportsmans Warehouse', 'Orvis'],
     'Grocery': ['Walmart', 'Kroger', 'Costco', 'Albertsons', 'Aldi', 'Publix', 'Target', 'H-E-B', 'Meijer', 'Whole Foods'],
     'Movies': ['Disney', 'Warner Bros', 'Universal Pictures', 'Paramount Pictures', '20th Century Fox', 'Columbia Pictures', 'Sony Pictures', 'Lionsgate', 'MGM', 'DreamWorks'],
     'Music': ['Universal Music Group', 'Sony Music Entertainment', 'Warner Music Group', 'EMI', 'BMG', 'Capitol Records', 'Columbia Records', 'Atlantic Records', 'RCA Records', 'Island Records'],
     'Games': ['Nintendo', 'Sony', 'Microsoft', 'Activision', 'Electronic Arts', 'Ubisoft', 'Blizzard Entertainment', 'Square Enix', 'Take-Two Interactive', 'Sega'],
-    'Tools': ['Home Depot', 'Lowe\'s', 'Ace Hardware', 'Menards', 'True Value', 'Orchard Supply Hardware', 'Do it Best', 'Sears', 'Harbor Freight Tools', 'Northern Tool + Equipment'],
+    'Tools': ['Home Depot', 'Lowes', 'Ace Hardware', 'Menards', 'True Value', 'Orchard Supply Hardware', 'Do it Best', 'Sears', 'Harbor Freight Tools', 'Northern Tool + Equipment'],
     'Pet Supplies': ['PetSmart', 'Petco', 'Chewy', 'Pet Supplies Plus', 'Pet Valu', 'Pet Supermarket', 'Petland', 'Petland Discounts', 'PetSense', 'Pet People'],
     'Jewelry': ['Tiffany & Co.', 'Cartier', 'Harry Winston', 'Bulgari', 'Van Cleef & Arpels', 'Chopard', 'Piaget', 'Graff', 'David Yurman', 'Mikimoto']
 }
@@ -87,7 +87,8 @@ supplying_countries_cities = {
 categories = list(product_categories.keys())
 
 def generate_customers(num_customers=10000):
-    customers = []
+    customers_sql, customers_csv = [], []
+
     for customer_id in range(1, num_customers + 1):
         first_name = fake.first_name()
         last_name = fake.last_name()
@@ -100,16 +101,20 @@ def generate_customers(num_customers=10000):
         zipcode = f'{random.randint(10, 99)}{random.randint(1, 9)} {random.choice(["1AB", "2CD", "3EF", "4GH", "5IJ", "6KL", "7MN", "8OP", "9QR"])}'
         date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=75).strftime('%Y-%m-%d')
         customer_type = random.choice(['Premium', 'Regular'])
+
+        customers_sql.append(
+            f"({customer_id}, '{first_name}', '{last_name}', '{email}', '{phone}', '{address}', '{city}', '{state}', '{country}', '{zipcode}', '{date_of_birth}', '{customer_type}')"
+        )
         
-        customers.append(
+        customers_csv.append(
             f"({customer_id}, {first_name}, {last_name}, {email}, {phone}, {address}, {city}, {state}, {country}, {zipcode}, {date_of_birth}, {customer_type})"
         )
 
-    return customers
+    return customers_sql, customers_csv
 
 # Function to generate SQL insert for sales
 def generate_sales(num_sales=20000, num_customers=10000, num_stores=10):
-    sales = []
+    sales_sql, sales_csv = [], []
     for sale_id in range(1, num_sales + 1):
         customer_id = random.randint(1, num_customers)
         sale_date = fake.date_between(start_date='-2y', end_date='today').strftime("%Y-%m-%d")
@@ -118,26 +123,32 @@ def generate_sales(num_sales=20000, num_customers=10000, num_stores=10):
         discount_amount = round(random.uniform(0.00, 50.00), 2)
         payment_method = random.choice(['Credit Card', 'Debit Card', 'PayPal', 'Cash'])
 
-        sales.append(
+        sales_sql.append(
+            f"({sale_id}, {customer_id}, '{sale_date}', {store_id}, {total_amount}, {discount_amount}, '{payment_method}')"
+        )
+
+        sales_csv.append(
             f"({sale_id}, {customer_id}, {sale_date}, {store_id}, {total_amount}, {discount_amount}, {payment_method})"
         )
 
-    return sales
+    return sales_sql, sales_csv
 
 # Function to generate SQL insert for categories
 def generate_categories():
-    p_categories = []
+    p_categories_sql, p_categories_csv = [], []
     for category in categories:
         category_id = categories.index(category) + 1
         category_name = category
         description = f"Products in the {category_name.lower()} category"
-        p_categories.append(f"({category_id}, '{category_name}', '{description}')")
 
-    return p_categories
+        p_categories_sql.append(f"({category_id}, '{category_name}', '{description}')")
+        p_categories_csv.append(f"({category_id}, {category_name}, {description})")
+
+    return p_categories_sql, p_categories_csv
 
 # Products should be generate from the product_categories. Each product under become a product
 def generate_products():
-    products = []
+    products_sql, products_csv = [], []
     for category, sub_categories in product_categories.items():
         for product in sub_categories:
             product_name = product
@@ -148,15 +159,19 @@ def generate_products():
             quantity_in_stock = random.randint(0, 100)
             supplier_id = random.randint(1, 50)
 
-            products.append(
+            products_sql.append(
                 f"('{product_name}', {category_id}, '{brand}', {price}, {cost_price}, {quantity_in_stock}, {supplier_id})"
-        )
+            )
+            
+            products_csv.append(
+                f"({product_name}, {category_id}, {brand}, {price}, {cost_price}, {quantity_in_stock}, {supplier_id})"
+            )
 
-    return products
+    return products_sql, products_csv
 
 # Function to generate SQL insert for suppliers
 def generate_suppliers(num_suppliers=50):
-    suppliers = []
+    suppliers_sql, suppliers_csv = [], []
     for supplier_id in range(1, num_suppliers + 1):
         supplier_name = random.choice(companies[random.choice(categories)])
         contact_person = fake.name()
@@ -201,15 +216,20 @@ def generate_suppliers(num_suppliers=50):
             phone = f'+86{random.randint(200000000, 999999999)}'
 
 
-        suppliers.append(
-            f"('{supplier_name}', '{contact_person}', '{phone}', '{email}', '{address}', '{city}', '{state}', '{country}', '{zip_code}')"
+        suppliers_sql.append(
+            f"({supplier_id}, '{supplier_name}', '{contact_person}', '{phone}', '{email}', '{address}', '{city}', '{state}', '{country}', '{zip_code}')"
         )
 
-    return suppliers
+        suppliers_csv.append(
+            f"({supplier_id}, {supplier_name}, {contact_person}, {phone}, {email}, {address}, {city}, {state}, {country}, {zip_code})"
+        )
+
+    return suppliers_sql, suppliers_csv
 
 # Function to generate SQL insert for stores
 def generate_stores(num_stores=10):
-    stores = []
+    stores_sql, stores_csv = [], []
+
     for store_id in range(1, num_stores + 1):
         address = fake.address().replace("\n", ", ")
         city = random.choice(states)
@@ -219,13 +239,15 @@ def generate_stores(num_stores=10):
         zip_code = f'{random.randint(10, 99)}{random.randint(1, 9)} {random.choice(["1AB", "2CD", "3EF", "4GH", "5IJ", "6KL", "7MN", "8OP", "9QR"])}'
         phone = f'+44{random.randint(7000000000, 7999999999)}'
         
-        stores.append(f"('{store_name}', '{address}', '{city}', '{state}', '{country}', '{zip_code}', '{phone}')")
-    return stores
+        stores_sql.append(f"({store_id}, '{store_name}', '{address}', '{city}', '{state}', '{country}', '{zip_code}', '{phone}')")
+        stores_csv.append(f"({store_id}, {store_name}, {address}, {city}, {state}, {country}, {zip_code}, {phone})")
+
+    return stores_sql, stores_csv
 
 
 # Function to generate SQL insert for inventory
 def generate_inventory(num_inventory=1000, num_stores=10, num_products=170):
-    inventory = []
+    inventory_sql, inventory_csv = [], []
     for inventory_id in range(1, num_inventory + 1):
         product_id = random.randint(1, num_products)
         store_id = random.randint(1, num_stores)
@@ -233,12 +255,14 @@ def generate_inventory(num_inventory=1000, num_stores=10, num_products=170):
         reorder_level = random.randint(10, 50)
         last_restocked_date = fake.date_between(start_date='-1y', end_date='today').strftime("%Y-%m-%d")
         
-        inventory.append(f"({product_id}, {store_id}, {quantity_available}, {reorder_level}, '{last_restocked_date}')")
-    return inventory
+        inventory_sql.append(f"({inventory_id}, {product_id}, {store_id}, {quantity_available}, {reorder_level}, '{last_restocked_date}')")
+        inventory_csv.append(f"({inventory_id}, {product_id}, {store_id}, {quantity_available}, {reorder_level}, {last_restocked_date})")
+
+    return inventory_sql, inventory_csv
 
 # Function to generate SQL insert for sales items
 def generate_sales_items(num_sales_items=30000, num_sales=20000, num_products=170):
-    sales_items = []
+    sales_items_sql, sales_items_csv = [], []
     for sale_item_id in range(1, num_sales_items + 1):
         sale_id = random.randint(1, num_sales)
         product_id = random.randint(1, num_products)
@@ -246,65 +270,73 @@ def generate_sales_items(num_sales_items=30000, num_sales=20000, num_products=17
         price_at_sale = round(random.uniform(10.00, 500.00), 2)
         total_line_amount = round(price_at_sale * quantity, 2)
         
-        sales_items.append(f"({sale_id}, {product_id}, {quantity}, {price_at_sale}, {total_line_amount})")
-    return sales_items
+        sales_items_sql.append(f"({sale_id}, {product_id}, {quantity}, {price_at_sale}, {total_line_amount})")
+        sales_items_csv.append(f"({sale_id}, {product_id}, {quantity}, {price_at_sale}, {total_line_amount})")
+    return sales_items_sql, sales_items_csv
 
 # Function to generate SQL insert for payments
 def generate_payments(num_payments=20000, num_sales=20000):
-    payments = []
+    payments_sql, payments_csv = [], []
     for payment_id in range(1, num_payments + 1):
         sale_id = random.randint(1, num_sales)
         payment_date = fake.date_between(start_date='-2y', end_date='today').strftime("%Y-%m-%d")
         payment_amount = round(random.uniform(20.00, 1000.00), 2)
         payment_method = random.choice(['Credit Card', 'Debit Card', 'PayPal', 'Cash'])
         
-        payments.append(f"({sale_id}, '{payment_date}', {payment_amount}, '{payment_method}')")
-    return payments
+        payments_sql.append(f"({sale_id}, '{payment_date}', {payment_amount}, '{payment_method}')")
+        payments_csv.append(f"({sale_id}, {payment_date}, {payment_amount}, {payment_method})")
+    return payments_sql, payments_csv
 
 
 # Generate and save SQL commands to insert data
 def save_data_to_file():
 
     # Customers
-    customers = generate_customers()
-    # with open('customers.sql', 'w') as file:
-    #     file.write("""INSERT INTO customers (first_name, last_name, email, phone, address, 
-    #                city, state, country, zip_code, date_of_birth, customer_type) VALUES\n""")
-    #     file.write(",\n".join(customers) + ";\n")
+    customers_sql, customers_csv = generate_customers()
+    with open('data/customers.sql', 'w') as file:
+        file.write("""INSERT INTO customers (first_name, last_name, email, phone, address, 
+                   city, state, country, zip_code, date_of_birth, customer_type) VALUES\n""")
+        file.write(",\n".join(customers_sql) + ";\n")
 
     # Convert the list to a CSV file
-    csv = open('customers.csv', 'w')
+    csv = open('data/customers.csv', 'w')
     csv.write("customer_id, first_name, last_name, email, phone, address, city, state, country, zip_code, date_of_birth, customer_type\n")
-    for customer in customers:
+    for customer in customers_csv:
         csv.write(f"{customer[1:-1]}\n")
     csv.close()
 
     
     # # Sales
-    sales = generate_sales()
-    with open('sales.sql', 'w') as file:
+    sales_sql, sales_csv = generate_sales()
+    with open('data/sales.sql', 'w') as file:
         file.write("INSERT INTO sales (customer_id, sale_date, store_id, total_amount, discount_amount, payment_method) VALUES\n")
-        file.write(",\n".join(sales) + ";\n")
+        file.write(",\n".join(sales_sql) + ";\n")
 
     # Convert the list to a CSV file
     csv = open('sales.csv', 'w')
     csv.write("sale_id, customer_id, sale_date, store_id, total_amount, discount_amount, payment_method\n")
-    for sale in sales:
+    for sale in sales_csv:
         csv.write(f"{sale[1:-1]}\n")
     csv.close()
 
 
     # Categories
-    categories = generate_categories()
-    with open('categories.sql', 'w') as file:
+    categories_sql, categories_csv = generate_categories()
+    with open('data/categories.sql', 'w') as file:
         file.write("INSERT INTO categories (category_id, category_name, description) VALUES\n")
         file.write(",\n".join(categories) + ";\n")
     
     # Suppliers
-    suppliers = generate_suppliers()
-    with open('suppliers.sql', 'w') as file:
+    suppliers_sql, suppliers_csv = generate_suppliers()
+    with open('data/suppliers.sql', 'w') as file:
         file.write("INSERT INTO suppliers (supplier_name, contact_person, phone, email, address, city, state, country, zip_code) VALUES\n")
-        file.write(",\n".join(suppliers) + ";\n")
+        file.write(",\n".join(suppliers_sql) + ";\n")
+
+    # Convert the list to a CSV file
+    csv = open('suppliers.csv', 'w')
+    csv.write("supplier_id, supplier_name, contact_person, phone, email, address, city, state, country, zip_code\n")
+    for supplier in suppliers_csv:
+        csv.write(f"{supplier[1:-1]}\n")
     
     # Products
     products = generate_products()
