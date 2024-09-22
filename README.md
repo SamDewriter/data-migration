@@ -15,9 +15,11 @@ ShopEase Retail currently relies on an aging on-premise database infrastructure 
 To remain competitive and enhance business operations, ShopEase must migrate to a more scalable, cost-effective, and reliable cloud-based data infrastructure. This migration will not only reduce the burden of maintaining on-premise resources but also improve data accessibility, enabling advanced analytics to drive business insights and improve the customer experience.
 
 <h3>Rationale for the Project</h3>
-- Cost Reduction
-- Improved Reliability and Uptime
-- Scalability
-- Faster Data Access and Analytics
-- Improved Customer Experience
-- Enhanced Data Security and Compliance
+<ul>
+  <li>Cost Reduction</li>
+  <li>Improved Reliability and Uptime</li>
+  <li>Scalability</li>
+  <li>Faster Data Access and Analytics</li>
+  <li>Improved Customer Experience</li>
+  <li>Enhanced Data Security and Compliance</li>
+</ul>
