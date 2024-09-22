@@ -4,9 +4,7 @@ import random
 fake = Faker()
 
 email_domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com']
-
 states = ['London', 'Manchester', 'Birmingham', 'Liverpool', 'Leeds', 'Newcastle', 'Bristol', 'Sheffield', 'Nottingham', 'Southampton']
-
 state_city = [
     {'London': ['London', 'Barking', 
                 'Barnet', 'Bexley', 'Brent', 
@@ -18,26 +16,16 @@ state_city = [
                 'Lambeth', 'Lewisham', 'Merton', 'Newham', 'Redbridge', 
                 'Richmond', 'Southwark', 'Sutton', 'Tower Hamlets', 'Waltham Forest', 
                 'Wandsworth', 'Westminster']},
-
     {'Manchester': ['Manchester', 'Bolton', 'Bury', 'Oldham', 'Rochdale', 
                     'Salford', 'Stockport', 'Tameside', 'Trafford', 'Wigan']},
-
     {'Birmingham': ['Birmingham', 'Coventry', 'Dudley', 'Sandwell', 'Solihull']},
-
     {'Liverpool': ['Liverpool', 'Knowsley', 'St Helens', 'Sefton', 'Wirral']},
-
     {'Leeds': ['Leeds', 'Bradford', 'Calderdale', 'Kirklees', 'Wakefield']},
-
     {'Newcastle': ['Newcastle', 'Gateshead', 'North Tyneside', 'South Tyneside', 'Sunderland']},
-
     {'Bristol': ['Bristol', 'Bath', 'North East Somerset', 'South Gloucestershire']},
-
     {'Sheffield': ['Sheffield', 'Barnsley', 'Doncaster', 'Rotherham']},
-
     {'Nottingham': ['Nottingham', 'Ashfield', 'Bassetlaw', 'Broxtowe', 'Gedling',
-                    
                     'Mansfield', 'Newark', 'Sherwood', 'Rushcliffe']},
-
     {'Southampton': ['Southampton', 'Eastleigh', 'Fareham', 'Gosport', 'Havant', 'New Forest', 'Test Valley', 'Winchester']}
 
 ]
@@ -130,12 +118,10 @@ def generate_sales(num_sales=20000, num_customers=10000, num_stores=10):
         discount_amount = round(random.uniform(0.00, 50.00), 2)
         payment_method = random.choice(['Credit Card', 'Debit Card', 'PayPal', 'Cash'])
 
-        
         sales.append(
             f"({sale_id}, {customer_id}, {sale_date}, {store_id}, {total_amount}, {discount_amount}, {payment_method})"
         )
 
-    
     return sales
 
 # Function to generate SQL insert for categories
@@ -296,11 +282,11 @@ def save_data_to_file():
     
     # # Sales
     sales = generate_sales()
-    # with open('sales.sql', 'w') as file:
-    #     file.write("INSERT INTO sales (customer_id, sale_date, store_id, total_amount, discount_amount, payment_method) VALUES\n")
-    #     file.write(",\n".join(sales) + ";\n")
+    with open('sales.sql', 'w') as file:
+        file.write("INSERT INTO sales (customer_id, sale_date, store_id, total_amount, discount_amount, payment_method) VALUES\n")
+        file.write(",\n".join(sales) + ";\n")
 
-    # # Convert the list to a CSV file
+    # Convert the list to a CSV file
     csv = open('sales.csv', 'w')
     csv.write("sale_id, customer_id, sale_date, store_id, total_amount, discount_amount, payment_method\n")
     for sale in sales:
@@ -308,47 +294,47 @@ def save_data_to_file():
     csv.close()
 
 
-    # # Categories
-    # categories = generate_categories()
-    # with open('categories.sql', 'w') as file:
-    #     file.write("INSERT INTO categories (category_id, category_name, description) VALUES\n")
-    #     file.write(",\n".join(categories) + ";\n")
+    # Categories
+    categories = generate_categories()
+    with open('categories.sql', 'w') as file:
+        file.write("INSERT INTO categories (category_id, category_name, description) VALUES\n")
+        file.write(",\n".join(categories) + ";\n")
     
-    # # Suppliers
-    # suppliers = generate_suppliers()
-    # with open('suppliers.sql', 'w') as file:
-    #     file.write("INSERT INTO suppliers (supplier_name, contact_person, phone, email, address, city, state, country, zip_code) VALUES\n")
-    #     file.write(",\n".join(suppliers) + ";\n")
+    # Suppliers
+    suppliers = generate_suppliers()
+    with open('suppliers.sql', 'w') as file:
+        file.write("INSERT INTO suppliers (supplier_name, contact_person, phone, email, address, city, state, country, zip_code) VALUES\n")
+        file.write(",\n".join(suppliers) + ";\n")
     
-    # # Products
-    # products = generate_products()
-    # with open('products.sql', 'w') as file:
-    #     file.write("INSERT INTO products (product_name, categoryI_id, brand, price, cost_price, quantity_in_Stock, supplier_id) VALUES\n")
-    #     file.write(",\n".join(products) + ";\n")
+    # Products
+    products = generate_products()
+    with open('products.sql', 'w') as file:
+        file.write("INSERT INTO products (product_name, categoryI_id, brand, price, cost_price, quantity_in_Stock, supplier_id) VALUES\n")
+        file.write(",\n".join(products) + ";\n")
     
-    # # Stores
-    # stores = generate_stores()
-    # with open('stores.sql', 'w') as file:
-    #     file.write("INSERT INTO stores (store_name, address, city, state, country, zip_code, phone) VALUES\n")
-    #     file.write(",\n".join(stores) + ";\n")
+    # Stores
+    stores = generate_stores()
+    with open('stores.sql', 'w') as file:
+        file.write("INSERT INTO stores (store_name, address, city, state, country, zip_code, phone) VALUES\n")
+        file.write(",\n".join(stores) + ";\n")
     
-    # # Inventory
-    # inventory = generate_inventory()
-    # with open('inventory.sql', 'w') as file:
-    #     file.write("INSERT INTO inventory (product_id, store_id, quantity_available, reorder_level, last_restocked_date) VALUES\n")
-    #     file.write(",\n".join(inventory) + ";\n")
+    # Inventory
+    inventory = generate_inventory()
+    with open('inventory.sql', 'w') as file:
+        file.write("INSERT INTO inventory (product_id, store_id, quantity_available, reorder_level, last_restocked_date) VALUES\n")
+        file.write(",\n".join(inventory) + ";\n")
     
-    # # Sales Items
-    # sales_items = generate_sales_items()
-    # with open('sales_items.sql', 'w') as file:
-    #     file.write("INSERT INTO SalesItems (product_id, quantity, price_at_sale, total_line_amount) VALUES\n")
-    #     file.write(",\n".join(sales_items) + ";\n")
+    # Sales Items
+    sales_items = generate_sales_items()
+    with open('sales_items.sql', 'w') as file:
+        file.write("INSERT INTO SalesItems (product_id, quantity, price_at_sale, total_line_amount) VALUES\n")
+        file.write(",\n".join(sales_items) + ";\n")
     
-    # # Payments
-    # payments = generate_payments()
-    # with open('payments.sql', 'w') as file:
-    #     file.write("INSERT INTO payments (sale_id, payment_date, payment_amount, payment_method) VALUES\n")
-    #     file.write(",\n".join(payments) + ";\n")
+    # Payments
+    payments = generate_payments()
+    with open('payments.sql', 'w') as file:
+        file.write("INSERT INTO payments (sale_id, payment_date, payment_amount, payment_method) VALUES\n")
+        file.write(",\n".join(payments) + ";\n")
 
 
 save_data_to_file()
