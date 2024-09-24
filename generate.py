@@ -305,7 +305,6 @@ def save_data_to_file():
         csv.write(f"{customer[1:-1]}\n")
     csv.close()
 
-    
     # # Sales
     sales_sql, sales_csv = generate_sales()
     with open('data/sales.sql', 'w') as file:
@@ -324,8 +323,15 @@ def save_data_to_file():
     categories_sql, categories_csv = generate_categories()
     with open('data/categories.sql', 'w') as file:
         file.write("INSERT INTO categories (category_id, category_name, description) VALUES\n")
-        file.write(",\n".join(categories) + ";\n")
-    
+        file.write(",\n".join(categories_sql) + ";\n")
+
+    # Convert the list to a CSV file
+    csv = open('data/categories.csv', 'w')
+    csv.write("category_id, category_name, description\n")
+    for category in categories_csv:
+        csv.write(f"{category[1:-1]}\n")
+    csv.close()
+
     # Suppliers
     suppliers_sql, suppliers_csv = generate_suppliers()
     with open('data/suppliers.sql', 'w') as file:
@@ -333,16 +339,19 @@ def save_data_to_file():
         file.write(",\n".join(suppliers_sql) + ";\n")
 
     # Convert the list to a CSV file
-    csv = open('suppliers.csv', 'w')
+    csv = open('data/suppliers.csv', 'w')
     csv.write("supplier_id, supplier_name, contact_person, phone, email, address, city, state, country, zip_code\n")
     for supplier in suppliers_csv:
         csv.write(f"{supplier[1:-1]}\n")
-    
+    csv.close()
+
     # Products
-    products = generate_products()
+    products_sql, product_csv = generate_products()
     with open('products.sql', 'w') as file:
         file.write("INSERT INTO products (product_name, categoryI_id, brand, price, cost_price, quantity_in_Stock, supplier_id) VALUES\n")
-        file.write(",\n".join(products) + ";\n")
+        file.write(",\n".join(products_sql) + ";\n")
+
+    
     
     # Stores
     stores = generate_stores()
